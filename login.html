@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shambala2056 — Login</title>
+<style>
+:root {
+  --accent: #7bd04a;
+  --accent2: #2ec4b6;
+  --bg: #0b1620;
+  --glass: rgba(255,255,255,0.05);
+  --text: #e6eef6;    
+  --muted: #9aa6b2;
+}
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { margin:0; min-height:100vh; background: radial-gradient(circle at top right, #18344a, #0b1620 70%); color: var(--text); overflow:hidden; }
+header { padding: 20px 28px; display:flex; justify-content:space-between; align-items:center; z-index:10; position:relative; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo img { width:46px;height:46px;border-radius:8px; }
+nav a { color: var(--muted); text-decoration:none; margin-left:18px; font-weight:600; }
+nav a.login { color: var(--accent); }
+
+.orb { position:absolute; border-radius:50%; filter:blur(120px); opacity:0.5; animation:float 15s infinite ease-in-out alternate; }
+.orb1 { width:300px; height:300px; background: var(--accent2); top:10%; left:10%; }
+.orb2 { width:400px; height:400px; background: var(--accent); bottom:10%; right:15%; }
+@keyframes float { from { transform: translateY(0); } to { transform: translateY(-60px); } }
+
+.container {
+  position:relative; z-index:2; width:360px; margin:120px auto 0; background:var(--glass);
+  border:1px solid rgba(255,255,255,0.1); backdrop-filter:blur(12px); border-radius:18px; padding:40px 32px;
+  box-shadow:0 0 40px rgba(0,0,0,0.3); animation:fadeIn 1.2s ease;
+}
+@keyframes fadeIn { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+
+h2 { text-align:center; margin-bottom:28px; font-size:1.6rem; color:white; }
+input { width:100%; padding:12px 14px; border-radius:10px; border:none; margin-bottom:16px; background: rgba(255,255,255,0.07); color:var(--text); transition: all 0.2s ease; }
+input:focus { outline:none; background: rgba(255,255,255,0.1); box-shadow:0 0 0 1px var(--accent2); }
+::placeholder { color:var(--muted); }
+
+.checkbox-container { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--muted); margin-bottom:10px; }
+.checkbox-container input { width:auto; margin-right:8px; }
+
+button { width:100%; padding:12px; border:none; border-radius:10px; font-weight:700; cursor:pointer; transition:transform 0.3s ease; }
+button.login-btn { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#041f1d; margin-bottom:12px; }
+button.login-btn:hover { transform:scale(1.05); }
+button.signup-btn { background:linear-gradient(135deg,var(--accent2),var(--accent)); color:#041f1d; margin-bottom:12px; }
+button.signup-btn:hover { transform:scale(1.05); }
+button.forgot-btn { background: linear-gradient(135deg,#ff6b6b,#ff8787); color:#041f1d; }
+button.forgot-btn:hover { transform:scale(1.05); }
+
+.msg { text-align:center; font-size:14px; margin-top:10px; }
+.brand-footer { text-align:center; margin-top:24px; font-size:12px; color:var(--muted); letter-spacing:0.5px; }
+.brand-footer strong { color:var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo"><img src="logo.png" alt="Shambala2056 Logo"></div>
+  </div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="zero.html">Go Zero</a>
+    <a href="green.html">Go Green</a>
+    <a href="story.html">Create a Story</a>
+    <a href="contact.html">Contact</a>
+    <a href="profile.html">Profile</a>
+    <a href="login.html">Login</a>
+  </nav>
+</header>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<form class="container" id="loginForm">
+  <h2>Shambala2056-д тавтай морил</h2>
+  <input type="email" name="email" id="email" placeholder="И-мэйл" required>
+  <input type="password" name="password" id="password" placeholder="Нууц үг" required>
+  <div class="checkbox-container">
+    <label><input type="checkbox" name="remember" id="remember"> Намайг сана</label>
+  </div>
+  <button type="submit" class="login-btn">Нэвтрэх</button>
+  <button type="button" onclick="window.location.href='signup.html'" class="signup-btn">Бүртгүүлэх</button>
+  <button type="button" class="forgot-btn" onclick="forgotPwd()">Нууц үг сэргээх</button>
+  <div class="msg" id="msg"></div>
+  <div class="brand-footer">© <strong>Shambala2056</strong> — Go Zero • Go Green</div>
+</form>
+
+<script>
+// Жагсаалт энгийн симуляц
+const users = [
+  { email:'oyundari@shambala2056.mn', password:'123456' },
+  { email:'user2@example.com', password:'password' }
+];
+
+const form = document.getElementById('loginForm');
+const msg = document.getElementById('msg');
+
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const remember = document.getElementById('remember').checked;
+
+  const user = users.find(u => u.email === email && u.password === password);
+  if(user){
+    msg.style.color = 'var(--accent)';
+    msg.textContent = 'Амжилттай нэвтэрлээ! 🌱';
+    if(remember) localStorage.setItem('loggedInUser', email);
+    setTimeout(()=>{ window.location.href='profile.html'; }, 1000);
+  }else{
+    msg.style.color = '#ff6b6b';
+    msg.textContent = 'И-мэйл эсвэл нууц үг буруу байна.';
+  }
+});
+
+// Нууц үг сэргээх функц
+function forgotPwd(){
+  const email = prompt("Нууц үг сэргээх И-мэйлээ оруулна уу:");
+  if(email){
+    const user = users.find(u => u.email === email.trim());
+    if(user){
+      alert("Таны нууц үгийг сэргээх холбоос имэйлээр илгээгдсэн гэж төсөөлнө.");
+    }else{
+      alert("Ийм и-мэйлтэй хэрэглэгч олдсонгүй.");
+    }
+  }
+}
+</script>
+</body>
+</html>
